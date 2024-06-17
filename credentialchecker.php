@@ -1,7 +1,7 @@
 <?php
     include('config/dbcheck.php');
-    $errormsg = array('srn' => '', 'mode'=>'', 'firstname'=>'', 'middlename'=>'', 'lastname'=>'', 'address'=>'', 'gender'=>'',  'birth'=>'', 'email' => '', 'contact'=>'', 'place'=>'',);
-    $srn = $mode = $firstname = $midname = $lastname = $suffix = $address = $gender = $rank = $birth = $contact = $status = $email = $place = '';
+    $errormsg = array('srn' => '', 'mode'=>'', 'firstname'=>'', 'middlename'=>'', 'lastname'=>'', 'address'=>'', 'gender'=>'',  'birth'=>'', 'email' => '', 'contact'=>'', 'place'=>'', 'password' => '');
+    $srn = $mode = $firstname = $midname = $lastname = $suffix = $address = $gender = $rank = $birth = $contact = $status = $email = $place = $password = '';
 
     if(isset($_POST['submit'])){
         #SRN number checker
@@ -122,13 +122,23 @@
 
 
         #Email checker
-        if ($_POST['email']) {
-          
+
+        if(empty($_POST['email'])){
+            $errormsg['email'] = "Please don't leave this blank";
+        }else if(!empty($_POST['email']) && !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
+            $errormsg['email'] = 'Please enter a proper email address';
+        }else{
             $email = $_POST['email'];
-           
-            if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
-                $errormsg['email'] = 'Please enter a proper email address';
-            }
+        }
+
+        // Password
+        if(empty($_POST['password'])){
+            #Creating an error message
+            $errormsg['password'] = 'Please don\'t leave this blank';
+        }else if(strlen($_POST['password']) < 6){
+            $errormsg['password'] = 'Password should be at least 6 characters long';
+        }else{
+            $password = $_POST['password'];
         }
 
         if (!empty($_POST['email']) && !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
@@ -172,10 +182,11 @@
             $contact = mysqli_real_escape_string($connect, $_POST['contact']);
             $status = mysqli_real_escape_string($connect, $_POST['status']);
             $email = mysqli_real_escape_string($connect, $_POST['email']);
+            $password = mysqli_real_escape_string($connect, $_POST['password']);
             $place = mysqli_real_escape_string($connect, $_POST['place-of-birth']);
 
             #Putting data on the database
-            $sql = "INSERT INTO trainees(srn_number,mode,firstname,middlename,lastname,suffix,addrss,gender,position,birth,stat,email,place,contact) VALUES('$srn','$mode','$firstname','$midname','$lastname','$suffix','$address','$gender','$rank','$birth','$status','$email','$place','$contact') ";
+            $sql = "INSERT INTO trainees(srn_number,mode,firstname,middlename,lastname,suffix,addrss,gender,position,birth,stat,email,password,place,contact) VALUES('$srn','$mode','$firstname','$midname','$lastname','$suffix','$address','$gender','$rank','$birth','$status','$email','$password','$place','$contact') ";
 
             #checking if there is a connection on the database
             if(mysqli_query($connect,$sql)){
@@ -187,8 +198,6 @@
                 echo "query_error:" . mysqli_error($connect);
             }
         }
-
-
     }
 
 
