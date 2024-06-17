@@ -1,0 +1,155 @@
+.wrapper{
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+}
+
+
+/*  TOP PORTION OF THE DIV (srn-number & mode*/
+.top{
+    display: flex;
+    flex-basis: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+
+}
+.srn > *{
+    display: flex;
+    width: 100%;
+
+}
+.srn{
+    width: 200px;
+}
+.mode{
+    display: flex;
+    flex-direction: column;
+    justify-content: right;
+    width: 120px;
+}
+
+
+
+/*  MIDDLE PORTION OF THE DIV (name) */
+.name{
+    display: flex;
+    flex-basis: 100%;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.name > div{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+
+}
+.box > *{
+    flex-basis: 100%;
+}
+.suffix-box {
+    width: 100px;
+}
+.box{
+    width: 350px;
+}
+
+
+
+/* LOWER PORTION OF THE DIV (additional info) */
+.ads{
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding-top: 0px;
+}
+.address, .gender{
+    display: flex;
+    flex-direction: column;
+}
+.address{
+    flex-basis: 90%;
+}
+.gender{
+    text-align: center;
+    width: 100px;
+}
+.errormsg{
+    color: red;
+    font-size: 10px;
+    font-family: arial, calibri, sans-serif;
+    text-align: center;
+}
+
+
+/* LOWEST PORTION OF THE DIV (additional info)*/
+.additional{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 20px;
+    gap: 10px;
+}
+.adbox{
+    display: flex;
+    flex-basis: 49%;
+    justify-content: flex-end;
+    flex-direction: column;
+}
+.adbox > input,select{
+    flex-basis: 100%;
+}
+
+
+.input{
+    text-align: center;
+    font-size: 15px;
+    font-family: Arial, Calibri sans-serif;
+    border: none;
+    border-bottom: 2px solid lightskyblue;
+    outline: none;
+
+}
+
+.info-submit{
+    display: flex;
+    flex-basis: 100%;
+    justify-content: center;
+}
+#submit{
+    padding: 10px;
+    font-size: 15px;
+    font-family: Arial, Calibri, sans-serif;
+    width: 15ch;
+    border-radius: 20px;
+}
+
+label{
+    font-size: 20px;
+    font-family: Arial, Calibri sans-serif;
+}
+
+/* Queries*/
+@media only screen and (max-width: 600px){
+    .top,.name > div{
+        text-align: left;
+    }
+    .box{
+        width: 100%;
+    }
+    .suffix-box{
+        width: 100%;
+    }
+    .address, .gender{
+        text-align: left;
+        flex-basis: 100%;
+    }
+    .input{
+        text-align: left;
+    }
+}

@@ -1,0 +1,11 @@
+
+$sql = 'SELECT first_name, last_name FROM name ';
+$result = mysqli_query($connect, $sql);
+
+$peerson = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+mysqli_free_result($result);
+
+mysqli_close($connect);
+
+print_r($peerson);
