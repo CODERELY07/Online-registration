@@ -68,89 +68,91 @@ if(isset($_POST['login'])){
         </div>
     </div>
     <!-- find schedule -->
-     <div class="container mb-5">
-        <div class="card">
-            <div class="p-4" style="background-color:#0C293A;color:#fff">
-                <h5 class="text-center">Find Your Shedule Here</h5>
-            </div>
-            <div class="card-body">
-                <p class="text-center"> <mark> To filter schedules further, you may select from the given options below.<mark></p>
-                <form id="sced">
-                    <div class="mb-3">
-                        <label for="" class="form-label bold">Select Course Category</label>
-                        <select class="form-control" name="course_category" id="course_category">
-                            <option selected value=""></option>
-                            <option value="customized">Customized</option>
-                            <?php
-                                $sql = "SELECT * FROM coursecategories";
-                                $result = $connect->query($sql) or die("Query Failed" . $connect->error);
+    <div class="row container box-parent">
+        <div class="container mb-5 col-lg">
+            <div class="card">
+                <div class="p-4" style="background-color:#0C293A;color:#fff">
+                    <h5 class="text-center">Find Your Shedule Here</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-center"> <mark> To filter schedules further, you may select from the given options below.<mark></p>
+                    <form id="sced">
+                        <div class="mb-3">
+                            <label for="" class="form-label bold">Select Course Category</label>
+                            <select class="form-control" name="course_category" id="course_category">
+                                <option selected value=""></option>
+                                <option value="customized">Customized</option>
+                                <?php
+                                    $sql = "SELECT * FROM coursecategories";
+                                    $result = $connect->query($sql) or die("Query Failed" . $connect->error);
 
-                                while($row = $result->fetch_assoc()){
-                                    echo "<option value='".$row['category_id'] ."'>". $row['category_name'] . "</option>";
-                                }
-                            ?>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="" class="form-label">Select Mode of Training </label>
-                        <select class="form-control" name="mode" id="mode">
-                            <option selected value=""></option>
-                            <option value="Classroom">Classroom</option>
-                            <option value="ONELINE">ONELINE</option>
-                            <option value="BLENDED">BLENDED</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <p style="display:none" class="loading" id="course_load">&#8230</p>
-                        <label for="" class="form-label" id="course_label">Select Course </label>
-                        <select class="form-control" name="course" id="course">
-                        <option value=""></option>
-                        <?php
-                                $sql = "SELECT DISTINCT * FROM courses";
-                                $result = $connect->query($sql) or die("Query Failed" . $connect->error);
-
-                                while($row = $result->fetch_assoc()){
-                                    echo "<option value='".$row['course_id'] ."'>". $row['course_name'] . "</option>";
-                                }
-                            ?>
-                        </select>
-                    </div>
-                    <!-- messages -->
-                    <div class='alert alert-primary text-center text-primary' id="modeAlert" role='alert'>
-                         Please select course to see upcoming schedules.
-                    </div>
-                    <div class='alert alert-danger text-center text-danger' id="courseAlert" role='alert'>
-                        Upcoming Schedules
-                    </div>
-                    <div id="upcoming-sched">
-                        <table id="requirements" class="table table-bordered" style=''>
-                            <!-- requirments table -->
-                        </table>
-                        <div id="schedule">
-                            <!-- shcedule table -->
+                                    while($row = $result->fetch_assoc()){
+                                        echo "<option value='".$row['category_id'] ."'>". $row['category_name'] . "</option>";
+                                    }
+                                ?>
+                            </select>
                         </div>
-                    </div>
-                </form>
+                        <div class="mb-3">
+                            <label for="" class="form-label">Select Mode of Training </label>
+                            <select class="form-control" name="mode" id="mode">
+                                <option selected value=""></option>
+                                <option value="Classroom">Classroom</option>
+                                <option value="ONLINE">ONLINE</option>
+                                <option value="BLENDED">BLENDED</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <p style="display:none" class="loading" id="course_load">&#8230</p>
+                            <label for="" class="form-label" id="course_label">Select Course </label>
+                            <select class="form-control" name="course" id="course">
+                            <option value=""></option>
+                            <?php
+                                    $sql = "SELECT DISTINCT * FROM courses";
+                                    $result = $connect->query($sql) or die("Query Failed" . $connect->error);
+
+                                    while($row = $result->fetch_assoc()){
+                                        echo "<option value='".$row['course_id'] ."'>". $row['course_name'] . "</option>";
+                                    }
+                                ?>
+                            </select>
+                        </div>
+                        <!-- messages -->
+                        <div class='alert alert-primary text-center text-primary' id="modeAlert" role='alert'>
+                            Please select course to see upcoming schedules.
+                        </div>
+                        <div class='alert alert-danger text-center text-danger' id="courseAlert" role='alert'>
+                            Upcoming Schedules
+                        </div>
+                        <div id="upcoming-sched">
+                            <table id="requirements" class="table table-bordered" style=''>
+                                <!-- requirments table -->
+                            </table>
+                            <div id="schedule">
+                                <!-- shcedule table -->
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="container">
-        <section class="login card p-5">
-        <form action="<?php echo $_SERVER['PHP_SELF']?>" method="post">
-            <h2 class="text-center my-4">Login</h2>
-            <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Email address</label>
-                <input type="email" name="email" class="form-control" id="exampleInputEmail1" value="<?php echo $email?>" aria-describedby="emailHelp">
-            </div>
-            <div class="errormsg"><?php echo $errLoginMsg['email'] ?></div>
-            <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Password</label>
-                <input type="password" name="password" value="<?php echo $passsword?>"  class="form-control" id="exampleInputPassword1" value="">
-            </div>
-            <div class="errormsg"><?php echo $errLoginMsg['password'] ?><br><br>
-            <button type="submit" name="login" class="btn btn-primary">Submit</button>
-        </form>
-        </section>
+        <div class="container col-lg">
+            <section class="login card">
+            <form action="<?php echo $_SERVER['PHP_SELF']?>" method="post">
+                <h2 class="p-4 text-center" style="background-color:#0C293A;color:#fff">Login</h2>
+                <div class="mb-3 px-4">
+                    <label for="exampleInputEmail1" class="form-label">Email address</label>
+                    <input type="email" name="email" class="form-control" id="exampleInputEmail1" value="<?php echo $email?>" aria-describedby="emailHelp">
+                </div>
+                <div class="errormsg"><?php echo $errLoginMsg['email'] ?></div>
+                <div class="mb-1 px-4">
+                    <label for="exampleInputPassword1" class="form-label">Password</label>
+                    <input type="password" name="password" value="<?php echo $passsword?>"  class="form-control" id="exampleInputPassword1" value="">
+                </div>
+                <div class="errormsg"><?php echo $errLoginMsg['password'] ?><br><br>
+                <button type="submit" name="login" class="btn btn-dark mb-5">Submit</button>
+            </form>
+            </section>
+        </div>
     </div>
     <!-- jQuery library -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
