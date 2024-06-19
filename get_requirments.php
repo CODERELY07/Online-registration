@@ -16,7 +16,7 @@
         while($row = $result->fetch_assoc()){
             $output .= "<tr>
                 <td style='border:1px solid red' class='text-center'>$i</td>
-                <td class='text-center'>".$row['course_requirments_name']."</td>
+                <td style='border:1px solid red' class='text-center'>".$row['course_requirments_name']."</td>
             </tr>";
             $i++;  
         }

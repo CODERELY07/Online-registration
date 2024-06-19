@@ -52,6 +52,7 @@ if(isset($_POST['login'])){
     <title>Document</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="css/loading.css?v=<?php echo time(); ?>">
 </head>
 <body>
     <div class="container my-5">
@@ -100,10 +101,10 @@ if(isset($_POST['login'])){
                         </select>
                     </div>
                     <div class="mb-3">
-                        <p style="display:none" id="course_load">Please Wait</p>
+                        <p style="display:none" class="loading" id="course_load">&#8230</p>
                         <label for="" class="form-label" id="course_label">Select Course </label>
                         <select class="form-control" name="course" id="course">
-                        <option></option>
+                        <option value=""></option>
                         <?php
                                 $sql = "SELECT DISTINCT * FROM courses";
                                 $result = $connect->query($sql) or die("Query Failed" . $connect->error);
@@ -114,12 +115,20 @@ if(isset($_POST['login'])){
                             ?>
                         </select>
                     </div>
-                    <div id="test"></div>
-                    
+                    <!-- messages -->
+                    <div class='alert alert-primary text-center text-primary' id="modeAlert" role='alert'>
+                         Please select course to see upcoming schedules.
+                    </div>
+                    <div class='alert alert-danger text-center text-danger' id="courseAlert" role='alert'>
+                        Upcoming Schedules
+                    </div>
                     <div id="upcoming-sched">
-                        
-                        <table id="requirements" class="table table-bordered" style='border:1px solid red;'></table>
-                        <div id="schedule"></div>
+                        <table id="requirements" class="table table-bordered" style=''>
+                            <!-- requirments table -->
+                        </table>
+                        <div id="schedule">
+                            <!-- shcedule table -->
+                        </div>
                     </div>
                 </form>
             </div>
@@ -175,48 +184,58 @@ if(isset($_POST['login'])){
                 })
             }
 
-            setTimeout(function(){
-            //         $.ajax({
-            //         url:'get_course.php',
-            //         type:'POST',
-            //         data:{course_category: course_cat},
-            //         success: function(response){
-            //             course_load.hide();
-            //             course_label.show();
-            //             course.show();
-            //             $('#course').html(response);
-            //         }
-            //     })
-            //     },1000)
-              
-          
             //course
+            // hides
+            $('#course_load').hide();
+            $('#modeAlert').hide();
+            $('#courseAlert').hide();
+
+            function modeAlert(){
+                var course_cat_id = $('#course_category').val();
+                var mode_id = $('#mode').val();
+                var course_id = $('#course').val();
+              
+                if(course_id != ""){
+                    $('#modeAlert').hide();
+                }
+                else{
+                    $('#modeAlert').show();
+                }
+
+                if(course_id != ""){
+                    $('#courseAlert').show();
+                }else{
+                    $('#courseAlert').hide();
+                }
+            }
+           
 
             $('#course_category').change(function(){
+                modeAlert();
                 var category_id = $(this).val();
                 // console.log(category_id);
-                course_load.show();
-                course_label.hide();
-                course.hide();
-
+                $('#course_load').show();
+                $('#course').hide();
+                $('#course_label').hide();
+                
                 setTimeout(function(){
                     $.ajax({
                         url: "get_courses.php",
                         type:'POST',
                         data:{category_id:category_id},
                         success: function(response){
-                            course_load.hide();
-                            course_label.show();
-                            course.show();
+                            $('#course_load').hide();
+                            $('#course').show();
+                            $('#course_label').show();
                             $('#course').html(response);
                         }
                     })
                 },1000)
-              
             });
 
             // requirements
             $('#course').change(function(){
+                modeAlert()
                 var course_id = $(this).val();
                 // console.log(course_id);
 
@@ -233,6 +252,7 @@ if(isset($_POST['login'])){
             
            //schedule
            $('#course').change(function(){
+                modeAlert()
                 var course_id = $(this).val();
                 // console.log(mode);
                 // console.log(course_id);
@@ -246,8 +266,12 @@ if(isset($_POST['login'])){
                     }
                 })
             })
+
+            // mode
             $('#course').change(function(){
+                modeAlert();
                 $('#mode').change(function(){
+                    modeAlert()
                     var mode = $(this).val();
                     var course_id = $('#course').val();
                     // console.log(mode);
@@ -264,7 +288,9 @@ if(isset($_POST['login'])){
                 })
             })
             $('#mode').change(function(){
+                modeAlert();
                 $('#course').change(function(){
+                    modeAlert();
                     var course_id = $(this).val();
                     var mode = $('#mode').val();
                     // console.log(mode);
@@ -281,34 +307,6 @@ if(isset($_POST['login'])){
                 })
             
             })
-
-            // $('#course_category').change(function(){
-            //     var course_cat = $(this).val();
-            //     // console.log(course_cat);
-            //     var course_load = $('#course_load');
-            //     var course_label = $('#course_label');
-            //     var course = $('#course');
-
-            //     course_load.show();
-            //     course_label.hide();
-            //     course.hide();
-
-            //     // add delay to see the result
-            //     setTimeout(function(){
-            //         $.ajax({
-            //         url:'get_course.php',
-            //         type:'POST',
-            //         data:{course_category: course_cat},
-            //         success: function(response){
-            //             course_load.hide();
-            //             course_label.show();
-            //             course.show();
-            //             $('#course').html(response);
-            //         }
-            //     })
-            //     },1000)
-              
-            // })
         });
        
     </script>
