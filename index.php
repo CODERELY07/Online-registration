@@ -79,6 +79,7 @@ if(isset($_POST['login'])){
                         <label for="" class="form-label bold">Select Course Category</label>
                         <select class="form-control" name="course_category" id="course_category">
                             <option selected value=""></option>
+                            <option value="customized">Customized</option>
                             <?php
                                 $sql = "SELECT * FROM coursecategories";
                                 $result = $connect->query($sql) or die("Query Failed" . $connect->error);
@@ -174,22 +175,44 @@ if(isset($_POST['login'])){
                 })
             }
 
-
+            setTimeout(function(){
+            //         $.ajax({
+            //         url:'get_course.php',
+            //         type:'POST',
+            //         data:{course_category: course_cat},
+            //         success: function(response){
+            //             course_load.hide();
+            //             course_label.show();
+            //             course.show();
+            //             $('#course').html(response);
+            //         }
+            //     })
+            //     },1000)
+              
           
             //course
 
             $('#course_category').change(function(){
                 var category_id = $(this).val();
                 // console.log(category_id);
+                course_load.show();
+                course_label.hide();
+                course.hide();
 
-                $.ajax({
-                    url: "get_courses.php",
-                    type:'POST',
-                    data:{category_id:category_id},
-                    success: function(response){
-                        $('#course').html(response)
-                    }
-                })
+                setTimeout(function(){
+                    $.ajax({
+                        url: "get_courses.php",
+                        type:'POST',
+                        data:{category_id:category_id},
+                        success: function(response){
+                            course_load.hide();
+                            course_label.show();
+                            course.show();
+                            $('#course').html(response);
+                        }
+                    })
+                },1000)
+              
             });
 
             // requirements

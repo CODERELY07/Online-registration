@@ -71,6 +71,7 @@ INSERT INTO positionList (position) VALUES
 ('Waiter'),
 ('Welder');
 
+-- ITO YONG BAGO MIKE PASTE MO LANG TO
 --courseCategories Table
 CREATE TABLE coursecategories(
     category_id INT AUTO_INCREMENT PRIMARY KEY,

@@ -7,12 +7,12 @@
     $sql = "SELECT * FROM course_requirments WHERE course_id = '$course_id'";
     $result = $connect->query($sql);
    $output = "";
-    $output .= "<tr>
-                <td style='border:1px solid red' class='text-center'>#</td>
-                <td style='border:1px solid red''><h5 class='text-danger  text-center'>Requirements</h5></td>
-            </tr>";
     if($result->num_rows > 0){
         $i = 1;
+        $output .= "<tr>
+        <td style='border:1px solid red' class='text-center'>#</td>
+        <td style='border:1px solid red''><h5 class='text-danger  text-center'>Requirements</h5></td>
+        </tr>";
         while($row = $result->fetch_assoc()){
             $output .= "<tr>
                 <td style='border:1px solid red' class='text-center'>$i</td>
