@@ -18,31 +18,30 @@
         $i = 1;
         while($row = $result->fetch_assoc()){
             $output .= "<br>
-            <table border='1'>
+            <table class='table table-bordered'>
                 <tr>
-                    <td>Batch</td>
-                    <td>".$row['batch']."</td>
+                    <td class='bg-primary' scope='col'>Batch</td>
+                    <td class='bg-primary' scope='col'>".$row['batch']."</td>
                    
                 </tr>
                 <tr>
-                     <td>Date</td>
-                    <td>".$row['batch_date']."</td>
+                     <td scope='col'>Date</td>
+                    <td scope='col'>".$row['batch_date']."</td>
                 </tr>
                 <tr>
-                     <td>Time</td>
-                    <td>".$row['batch_time']."</td>
+                     <td scope='col'>Time</td>
+                    <td scope='col'>".$row['batch_time']."</td>
                 </tr>
                 <tr>
-                     <td>Branch</td>
-                    <td>".$row['branch']."</td>
+                     <td scope='col'>Branch</td>
+                    <td scope='col'>".$row['branch']."</td>
                 </tr>
                 <tr>
-                     <td>Mode</td>
-                    <td>".$row['mode']."</td>
+                     <td scope='col'>Mode</td>
+                    <td scope='col'>".$row['mode']."</td>
                 </tr>
                 <tr>
-                     <td>Slots</td>
-                    <td>".$row['slots']." slot available</td>
+                    <td colspan='2' class='text-center'>".$row['slots']." slot available</td>
                 </tr>
             </table>";
             $i++;  

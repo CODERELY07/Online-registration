@@ -8,15 +8,15 @@
     $result = $connect->query($sql);
    $output = "";
     $output .= "<tr>
-                <td>#</td>
-                <td class='text-danger'>Requirements</td>
+                <td style='border:1px solid red' class='text-center'>#</td>
+                <td style='border:1px solid red''><h5 class='text-danger  text-center'>Requirements</h5></td>
             </tr>";
     if($result->num_rows > 0){
         $i = 1;
         while($row = $result->fetch_assoc()){
             $output .= "<tr>
-                <td>$i</td>
-                <td>".$row['course_requirments_name']."</td>
+                <td style='border:1px solid red' class='text-center'>$i</td>
+                <td class='text-center'>".$row['course_requirments_name']."</td>
             </tr>";
             $i++;  
         }

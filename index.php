@@ -116,8 +116,8 @@ if(isset($_POST['login'])){
                     <div id="test"></div>
                     
                     <div id="upcoming-sched">
-                        <p class='alert alert-danger text-center' id="sched-hide"></p>
-                        <table id="requirements" class="table"></table>
+                        
+                        <table id="requirements" class="table table-bordered" style='border:1px solid red;'></table>
                         <div id="schedule"></div>
                     </div>
                 </form>
@@ -144,6 +144,7 @@ if(isset($_POST['login'])){
     </div>
     <!-- jQuery library -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    
     <script>
         document.getElementById('Add').onclick = ()=>{
             window.location = "form.php";
@@ -174,7 +175,7 @@ if(isset($_POST['login'])){
             }
 
 
-            $('#sched-hide').hide();
+          
             //course
 
             $('#course_category').change(function(){
@@ -204,7 +205,6 @@ if(isset($_POST['login'])){
                         $('#requirements').html(response);
                     }
                 })
-                $('#sched-hide').show();
             })
             
             
@@ -222,7 +222,6 @@ if(isset($_POST['login'])){
                         $('#schedule').html(response);
                     }
                 })
-                $('#sched-hide').show();
             })
             $('#course').change(function(){
                 $('#mode').change(function(){
@@ -240,7 +239,6 @@ if(isset($_POST['login'])){
                         }
                     })
                 })
-                $('#sched-hide').show();
             })
             $('#mode').change(function(){
                 $('#course').change(function(){
