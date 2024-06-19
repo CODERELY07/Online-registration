@@ -3,9 +3,8 @@
     session_start();
     if(isset($_SESSION['login'])){
         header("Location:trainee-page.php");
-        exit();
     }
-    include ('credentialchecker.php')
+    include ('credentialchecker.php');
 
 ?>
 <!DOCTYPE html>
@@ -25,14 +24,20 @@
                     <div>
                         <p class="text-secondary">To create account enter your valid email address and password here.</p>
                         <label for="email" class="form-label">Email</label>
-                        <input class="form-control" type="text" name="email"  value="<?php echo $email?>">
+                        <input class="form-control" type="text" name="login_email"  value="<?php echo $email?>">
                         <div class="errormsg"><?php echo $errormsg['email'] ?>
                         </div>
                     </div>
                     <div>
                     <label for="password">Password</label>
-                    <input class="form-control" type="password" name="password"  value="<?php echo $password?>">
+                    <input class="form-control" type="password" name="login_password"  value="<?php echo $password?>">
                     <div class="errormsg"><?php echo $errormsg['password'] ?>
+                    </div>
+                    </div>
+                    <div>
+                    <label for="password">Confirm Password</label>
+                    <input class="form-control" type="password" name="confirm_password"  value="<?php echo $confirmpassword?>">
+                    <div class="errormsg"><?php echo $errormsg['confirmpassword'] ?>
                     </div>
                     </div>
                     <br>

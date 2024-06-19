@@ -1,8 +1,39 @@
 <?php
     include('config/dbcheck.php');
-    $errormsg = array('srn' => '', 'mode'=>'', 'firstname'=>'', 'middlename'=>'', 'lastname'=>'', 'address'=>'', 'gender'=>'',  'birth'=>'', 'email' => '', 'contact'=>'', 'place'=>'', 'password' => '');
-    $srn = $mode = $firstname = $midname = $lastname = $suffix = $address = $gender = $rank = $birth = $contact = $status = $email = $place = $password = '';
+    $errormsg = array('srn' => '', 'mode'=>'', 'firstname'=>'', 'middlename'=>'', 'lastname'=>'', 'address'=>'', 'gender'=>'',  'birth'=>'', 'email' => '', 'contact'=>'', 'place'=>'', 'password' => '','confirmpassword' => '','chkemail' => '' , 'chkpass' => '');
+    $srn = $mode = $firstname = $midname = $lastname = $suffix = $address = $gender = $rank = $birth = $contact = $status = $email = $place = $password = $confirmpassword = $checkemail = $checkpassword = '';
 
+    #login checker
+    if(isset($_POST['login'])){
+        if (empty($_POST['email'])) {
+            $errormsg['chkemail'] = "Please don't leave this blank";
+        }
+        if (empty($_POST['password'])){
+            $errormsg['chkpass'] = "Please don't leave this blank";
+        }
+        if (empty($errormsg['chkemail'] && empty($errormsg['chkpass']))) {
+            $checkemail = filter_var($checkemail, FILTER_SANITIZE_EMAIL);
+            $checkpassword = htmlspecialchars($_POST['password']);
+            $checkemail = mysqli_real_escape_string($connect, $_POST['email']);
+            $checkpassword = mysqli_real_escape_string($connect, $checkpassword);
+    
+            $sql = "SELECT * FROM trainees WHERE email = '$email' AND password = '$password'";
+    
+            $result = $connect->query($sql) or die($connect->error);
+    
+            if($result->num_rows > 0){
+                $row = $result->fetch_assoc();
+                $_SESSION['login'] = $row['id'];
+                echo header("Location: trainee-page.php");
+                exit();
+            }else{
+            echo "User not found";
+            }
+        }
+        
+    }
+
+    #registration checker
     if(isset($_POST['submit'])){
         #SRN number checker
         if (empty($_POST['srn'])) {
@@ -13,7 +44,7 @@
             $errormsg['srn'] = 'Must be composed of 10 digits only';
         } else {
                #Storing the data to a variable
-            $srn = $_POST['srn'];
+            $srn = htmlspecialchars($_POST['srn']);
         }
 
         #mode of learning checker
@@ -23,7 +54,7 @@
         }
         else{
             #Storing the data to a variable
-            $mode = $_POST['mode'];
+            $mode = htmlspecialchars($_POST['mode']);
         }
 
         #First Name checker
@@ -35,7 +66,7 @@
             $errormsg['firstname'] = 'Please enter a proper first name';
         } else {
             #Storing the data to a variable
-            $firstname = $_POST['firstname'];
+            $firstname = htmlspecialchars($_POST['firstname']);
         }
 
         #Middle Name checker
@@ -47,7 +78,7 @@
             $errormsg['middlename'] = 'Please enter a proper middle name';
         } else {
             #Storing the data to a variable
-            $midname = $_POST['midname'];
+            $midname = htmlspecialchars($_POST['midname']);
         }
 
 
@@ -60,7 +91,7 @@
             $errormsg['lastname'] = 'Please enter a proper last name';
         } else {
                #Checking if the inputed data is not correct
-            $lastname = $_POST['lastname'];
+            $lastname = htmlspecialchars($_POST['lastname']);
         }
 
         #Suffix checker
@@ -78,7 +109,7 @@
             $errormsg['address'] = 'Enter a valid address (ex: Barangay, Municipality Province)';
         } else {
             #Storing the data to a variable
-            $address = $_POST['address'];
+            $address = htmlspecialchars($_POST['address']);
         }
       
         #Gender checker
@@ -88,13 +119,13 @@
         }
         else{
             #Storing the data to a variable
-            $gender = $_POST['gender'];
+            $gender = htmlspecialchars($_POST['gender']);
         }
 
         #Rank checker
         if ($_POST['position']) {
             #Storing the data to a variable
-           $rank = $_POST['position'];
+           $rank = htmlspecialchars($_POST['position']);
        }
 
         #Birthday checker
@@ -117,35 +148,36 @@
             $errormsg['contact'] = 'Please enter a proper phone number';
         } else {
             #Storing the data to a variable
-            $contact = $_POST['contact'];
+            $contact = htmlspecialchars($_POST['contact']);
         }
 
 
-        #Email checker
+        
 
-        if(empty($_POST['email'])){
-            $errormsg['email'] = "Please don't leave this blank";
-        }else if(!empty($_POST['email']) && !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
-            $errormsg['email'] = 'Please enter a proper email address';
-        }else{
-            $email = $_POST['email'];
-        }
-
-        // Password
-        if(empty($_POST['password'])){
+        // Password & email
+        if(empty($_POST['login_password'])){
             #Creating an error message
             $errormsg['password'] = 'Please don\'t leave this blank';
-        }else if(strlen($_POST['password']) < 6){
+        }else if(strlen($_POST['login_password']) < 6){
             $errormsg['password'] = 'Password should be at least 6 characters long';
         }else{
-            $password = $_POST['password'];
+            $password = htmlspecialchars($_POST['login_password']);
+        }
+        if(empty($_POST['confirm_password'])){
+            $errormsg['confirmpassword'] = 'Please don\'t leave this blank';
+        }
+        else if($_POST['confirm_password'] != $_POST['login_password']) {
+            $errormsg['confirmpassword'] = "Your password does not match";
+        }
+        else{
+            $confirmpassword = htmlspecialchars($_POST['confirm_password']);
         }
 
-        if (!empty($_POST['email']) && !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+        if (empty($_POST['login_email']) && !filter_var($_POST['login_email'], FILTER_VALIDATE_EMAIL)) {
             $errormsg['email'] = 'Please enter a proper email address';
         } else {
               #Storing the data to a variable
-            $email = $_POST['email'];
+            $email = htmlspecialchars($_POST['login_email']);
         }
 
         #Place of birth checker
@@ -154,7 +186,7 @@
             $errormsg['place'] = 'Enter a valid place of birth (ex: Barangay, Municipality Province)';
         } else {
              #Storing the data to a variable
-            $place = $_POST['place-of-birth'];
+            $place = htmlspecialchars($_POST['place-of-birth']);
         }
 
         if (!empty($_POST['status'])) {
@@ -181,8 +213,8 @@
             $birth = mysqli_real_escape_string($connect, $_POST['date']);
             $contact = mysqli_real_escape_string($connect, $_POST['contact']);
             $status = mysqli_real_escape_string($connect, $_POST['status']);
-            $email = mysqli_real_escape_string($connect, $_POST['email']);
-            $password = mysqli_real_escape_string($connect, $_POST['password']);
+            $email = mysqli_real_escape_string($connect, $_POST['login_email']);
+            $password = mysqli_real_escape_string($connect, $_POST['login_password']);
             $place = mysqli_real_escape_string($connect, $_POST['place-of-birth']);
 
             #Putting data on the database
