@@ -1,3 +1,41 @@
+/* main */
+*,*::before,
+*::after{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box !important;
+}
+.main-bg{
+    background: #0C293A;
+    color: #fff;
+}
+.second-bg{
+    background-color: #007598;
+    color: #fff;
+}
+label{
+    font-size: 14px !important;
+    font-weight: bold;
+    color: #040D12;
+}
+input,select{
+    height: 34px;
+    box-shadow: none !important;
+    
+}
+i{
+    position: absolute !important;
+    top:7px;
+    cursor: pointer;
+    right: 10px;
+    color: #040D12;
+}
+.drop-parent{
+    position: relative;
+}
+.big{
+    font-size: 56px;
+}
 .wrapper{
     display: flex;
     width: 100%;
@@ -80,8 +118,11 @@
     width: 100px;
 }
 .errormsg{
-    color: red;
-    font-size: 10px;
+    color: #de2020;
+    font-size: 14px;
+    width: 93%;
+    padding: 5px;
+    margin: 0 auto;
     font-family: arial, calibri, sans-serif;
     text-align: center;
 }

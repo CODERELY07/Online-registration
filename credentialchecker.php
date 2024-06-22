@@ -8,29 +8,43 @@
         if (empty($_POST['email'])) {
             $errormsg['chkemail'] = "Please don't leave this blank";
         }
+        else {
+            $checkemail = htmlspecialchars($_POST['email']);
+        }
         if (empty($_POST['password'])){
             $errormsg['chkpass'] = "Please don't leave this blank";
         }
-        if (empty($errormsg['chkemail'] && empty($errormsg['chkpass']))) {
-            $checkemail = filter_var($checkemail, FILTER_SANITIZE_EMAIL);
-            $checkpassword = htmlspecialchars($_POST['password']);
-            $checkemail = mysqli_real_escape_string($connect, $_POST['email']);
-            $checkpassword = mysqli_real_escape_string($connect, $checkpassword);
-    
-            $sql = "SELECT * FROM trainees WHERE email = '$email' AND password = '$password'";
-    
-            $result = $connect->query($sql) or die($connect->error);
-    
-            if($result->num_rows > 0){
-                $row = $result->fetch_assoc();
-                $_SESSION['login'] = $row['id'];
-                echo header("Location: trainee-page.php");
-                exit();
-            }else{
-            echo "User not found";
+        if (empty($errormsg['chkemail']) && empty($errormsg['chkpass'])) {
+            $checkemail = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+            $checkpassword = $_POST['password'];
+            /*$pos = "SELECT * FROM trainees WHERE email ='$checkemail'";
+            $result = mysqli_query($connect,$pos);
+            $s = mysqli_num_rows($result);
+            echo $s;
+            $hashed_password = mysqli_fetch_assoc($result);*/
+            
+
+            $pos = "SELECT hashed_password FROM trainees WHERE email = '$checkemail'";
+            $query = $connect->query($pos) or die($connect->error);
+            $hashed_password = $query->fetch_assoc();
+            $searchResult = mysqli_num_rows($query);
+            if ($searchResult > 0) {
+                if(!password_verify($checkpassword, $hashed_password['hashed_password'])) {
+                    $errormsg['chkpass'] = "Incorrect Password!";
+                }
+                else{
+                    $sql = "SELECT id FROM trainees WHERE email = '$checkemail'";
+                    $query = $connect->query($sql) or die($connect->error);
+                    $res = $query->fetch_assoc();
+                    $_SESSION['login'] = $res['id'];
+                    echo header("Location: trainee-page.php");
+                    exit();
+                }
+            }
+            else{
+                echo "User not found make sure that your email address and password are correct";
             }
         }
-        
     }
 
     #registration checker
@@ -201,6 +215,9 @@
         }
         else{
             #filtering data
+            $password = mysqli_real_escape_string($connect, $_POST['login_password']);
+            $enc_password = password_hash($password, PASSWORD_DEFAULT);
+            $email = mysqli_real_escape_string($connect, $email);
             $srn = mysqli_real_escape_string($connect, $_POST['srn']);
             $mode = mysqli_real_escape_string($connect, $_POST['mode']);
             $firstname = mysqli_real_escape_string($connect, $_POST['firstname']);
@@ -214,16 +231,15 @@
             $contact = mysqli_real_escape_string($connect, $_POST['contact']);
             $status = mysqli_real_escape_string($connect, $_POST['status']);
             $email = mysqli_real_escape_string($connect, $_POST['login_email']);
-            $password = mysqli_real_escape_string($connect, $_POST['login_password']);
+            
             $place = mysqli_real_escape_string($connect, $_POST['place-of-birth']);
 
             #Putting data on the database
-            $sql = "INSERT INTO trainees(srn_number,mode,firstname,middlename,lastname,suffix,addrss,gender,position,birth,stat,email,password,place,contact) VALUES('$srn','$mode','$firstname','$midname','$lastname','$suffix','$address','$gender','$rank','$birth','$status','$email','$password','$place','$contact') ";
+            $sql = "INSERT INTO trainees(srn_number,mode,firstname,middlename,lastname,suffix,addrss,gender,position,birth,stat,email,hashed_password,place,contact) VALUES('$srn','$mode','$firstname','$midname','$lastname','$suffix','$address','$gender','$rank','$birth','$status','$email','$enc_password','$place','$contact') ";
 
             #checking if there is a connection on the database
             if(mysqli_query($connect,$sql)){
-                echo "success";
-                header("Location: form.php");
+                header("Location: index.php");
                 exit();
             }
             else{

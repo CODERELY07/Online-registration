@@ -5,163 +5,180 @@ if(isset($_SESSION['login'])){
     header("Location:trainee-page.php");
 
 }
-$email = $passsword = "";
-$errLoginMsg = array('email'=> '', 'password'=> '');
-$emailVerified = false;
-$passwordVerified = false;
+include ('credentialchecker.php');
 
-if(isset($_POST['login'])){
-    $email = mysqli_real_escape_string($connect, $_POST['email']);
-    $passsword = mysqli_real_escape_string($connect, $_POST['password']);
 
-    if(empty($email)){
-        $errLoginMsg['email'] = "Please don't leave this blank";
-    }else if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
-        $errLoginMsg['email'] = "Please Enter Valid Email Address";
-    }else{
-        $emailVerified = true;
-    }
-    if(empty($passsword)){
-        $errLoginMsg['password'] = "Please don't leave this blank";
-    }else if(strlen($_POST['password']) < 6){
-        $errLoginMsg['password'] = 'Password should be at least 6 characters long';
-    }else{
-        $passwordVerified = true;
-    }
-    
-    if($emailVerified && $passwordVerified){
-
-        $sql = "SELECT * FROM trainees WHERE email = '$email' AND password = '$passsword'";
-
-        $result = $connect->query($sql) or die($connect->error);
-
-        if($result->num_rows > 0){
-            $row = $result->fetch_assoc();
-            $_SESSION['login'] = $row['id'];
-            echo header("Location: trainee-page.php");
-            exit();
-        }else{
-            $errLoginMsg['password'] = 'Incorect Username and Password';
-        }
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <title>Document</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="style.css?v=<?php echo time(); ?>">
     <link rel="stylesheet" href="css/loading.css?v=<?php echo time(); ?>">
 </head>
 <body>
-    <div class="container my-5">
-        <div class="wrapper">
-            <div id='search-bar'>
-                <input type="text" name="search" id="search" autocomplete="off">
-                <button type="submit" id="search-btn" name="search-btn">Search</button>
-                <input type="button" id="Add" value="New Applicant">
+    <div>
+        <header>
+            <div class="row main-bg pt-5 pb-3">
+                <div class="col-lg py-2"><h1 class="text-center pt-2 big bolder">COMPAS</h1></div>
+                <div class="col-lg py-2 text-center">
+                    <h2>WELCOME ABROAD</h2>
+                    <p style="width:300px" class="mx-auto">MyCOMPASS Online Enrollment System and Student Portal</p>
+                </div>
+            </div>
+            <div class="other-info second-bg m-0" style="height:100px;width:100.7%" >
+
+            </div>
+        </header>
+        <div class="ms-4 my-5">
+            <p class="text-secondary">You can verify the existence of your account by searching using your registered email address</p>
+            <div class="">
+                <div id='search-bar'>
+                    <input class="form-control d-inline" type="text" name="search" id="search" autocomplete="off" style="width:300px">
+                    <button type="submit" class="btn btn-dark" id="search-btn" name="search-btn" style="margin-top:-5px">Search</button>
+                </div>
+            </div>
+            <div id="table-data" class="py-2">
+
             </div>
         </div>
-        <div id="table-data">
+      
+        <!-- find schedule -->
+        <div class="row container-fluid box-parent">
+            <div class=" mb-5 col-xl mx-2">
+                <div class="card">       
+                    <div class="p-3 pt-4" style="background-color:#0C293A;color:#fff">
+                        <h5 class="text-center">Find Your Shedule Here</h5>
+                    </div>
+                    <div class="card-body p-4 pt-5">
+                        <p class="text-center"> <mark> To filter schedules further, you may select from the given options below.<mark></p>
+                        <form id="sced" class="row mt-4">
+                            <div class="mb-3 col-xl">  
+                                <label for="" class="form-label bold">Select Course Category</label>
+                                <div class="drop-parent">
+                                    <i class="fa-solid fa-caret-down"></i>
+                                    <select class="form-control" name="course_category" id="course_category">
+                                        <option selected value=""></option>
+                                        <option value="customized">Customized</option>
+                                        <?php
+                                            $sql = "SELECT * FROM coursecategories";
+                                            $result = $connect->query($sql) or die("Query Failed" . $connect->error);
 
-        </div>
-    </div>
-    <!-- find schedule -->
-    <div class="row container box-parent">
-        <div class="container mb-5 col-lg">
-            <div class="card">
-                <div class="p-4" style="background-color:#0C293A;color:#fff">
-                    <h5 class="text-center">Find Your Shedule Here</h5>
+                                            while($row = $result->fetch_assoc()){
+                                                echo "<option value='".$row['category_id'] ."'>". $row['category_name'] . "</option>";
+                                            }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3 col-xl">
+                                <label for="" class="form-label">Select Mode of Training </label>
+                                <div class="drop-parent">
+                                    <i class="fa-solid fa-caret-down"></i>
+                                    <select class="form-control" name="mode" id="mode">
+                                        <option selected value=""></option>
+                                        <option value="Classroom">Classroom</option>
+                                        <option value="ONLINE">ONLINE</option>
+                                        <option value="BLENDED">BLENDED</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <p style="display:none" class="loading" id="course_load">&#8230</p>
+                                <label for="" class="form-label" id="course_label">Select Course </label>
+                                <div class="drop-parent">
+                                    <i class="fa-solid fa-caret-down"></i>
+                                    <select class="form-control" name="course" id="course">
+                                    <option value=""></option>
+                                    <?php
+                                            $sql = "SELECT DISTINCT * FROM courses";
+                                            $result = $connect->query($sql) or die("Query Failed" . $connect->error);
+
+                                            while($row = $result->fetch_assoc()){
+                                                echo "<option value='".$row['course_id'] ."'>". $row['course_name'] . "</option>";
+                                            }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- messages -->
+                            <div class='alert alert-primary text-center text-primary' id="modeAlert" role='alert'>
+                                Please select course to see upcoming schedules.
+                            </div>
+                            <div class='alert alert-danger text-center text-danger' id="courseAlert" role='alert'>
+                                Upcoming Schedules
+                            </div>
+                            <div id="upcoming-sched">
+                                <table id="requirements" class="table table-bordered" style=''>
+                                    <!-- requirments table -->
+                                </table>
+                                <div id="schedule">
+                                    <!-- shcedule table -->
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <p class="text-center"> <mark> To filter schedules further, you may select from the given options below.<mark></p>
-                    <form id="sced">
-                        <div class="mb-3">
-                            <label for="" class="form-label bold">Select Course Category</label>
-                            <select class="form-control" name="course_category" id="course_category">
-                                <option selected value=""></option>
-                                <option value="customized">Customized</option>
-                                <?php
-                                    $sql = "SELECT * FROM coursecategories";
-                                    $result = $connect->query($sql) or die("Query Failed" . $connect->error);
-
-                                    while($row = $result->fetch_assoc()){
-                                        echo "<option value='".$row['category_id'] ."'>". $row['category_name'] . "</option>";
-                                    }
-                                ?>
-                            </select>
+            </div>
+            <div class="col-xl mx-2 ">
+                <section class="login card">
+                    <h5 class="p-4 text-center" style="background-color:#0C293A;color:#fff">Login</h5>
+                    <form action="<?php echo $_SERVER['PHP_SELF']?>" method="post" class="mt-2 p-4 px-2" id="loginForm">
+                        <div class="mb-3 px-4">
+                            <label for="exampleInputEmail1" class="form-label">Email address</label>
+                            <input type="email" name="email" class="form-control" id="exampleInputEmail1" value="<?php echo $checkemail?>" aria-describedby="emailHelp">
                         </div>
-                        <div class="mb-3">
-                            <label for="" class="form-label">Select Mode of Training </label>
-                            <select class="form-control" name="mode" id="mode">
-                                <option selected value=""></option>
-                                <option value="Classroom">Classroom</option>
-                                <option value="ONLINE">ONLINE</option>
-                                <option value="BLENDED">BLENDED</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <p style="display:none" class="loading" id="course_load">&#8230</p>
-                            <label for="" class="form-label" id="course_label">Select Course </label>
-                            <select class="form-control" name="course" id="course">
-                            <option value=""></option>
-                            <?php
-                                    $sql = "SELECT DISTINCT * FROM courses";
-                                    $result = $connect->query($sql) or die("Query Failed" . $connect->error);
-
-                                    while($row = $result->fetch_assoc()){
-                                        echo "<option value='".$row['course_id'] ."'>". $row['course_name'] . "</option>";
-                                    }
-                                ?>
-                            </select>
-                        </div>
-                        <!-- messages -->
-                        <div class='alert alert-primary text-center text-primary' id="modeAlert" role='alert'>
-                            Please select course to see upcoming schedules.
-                        </div>
-                        <div class='alert alert-danger text-center text-danger' id="courseAlert" role='alert'>
-                            Upcoming Schedules
-                        </div>
-                        <div id="upcoming-sched">
-                            <table id="requirements" class="table table-bordered" style=''>
-                                <!-- requirments table -->
-                            </table>
-                            <div id="schedule">
-                                <!-- shcedule table -->
+                        <div class="errormsg"><?php echo $errormsg['chkemail'] ?></div>
+                        <div class="mb-3 px-4">
+                            <label for="passwordField" class="form-label">Password</label>
+                            <div class="drop-parent">
+                                <input type="password" name="password"  class="form-control" id="inputField" value="<?php echo $checkpassword?>">
+                                <i class="fa-regular fa-eye-slash eye" id="showPassword1"></i>
                             </div>
                         </div>
+                        <div class="errormsg"><?php echo $errormsg['chkpass'] ?></div><br><br>
+                        <div style="display:flex;justify-content:center;gap:20px">
+                            <button type="submit" id="login" name="login" class="btn btn-dark mb-2 ">Login</button>
+                            <button class="btn btn-dark mb-2">Clear</button>
+                        </div>
+                        <p class="form-label text-secondary" style="text-align: center; color:black;font-size:14px ">----OR----</p>
+                        <input type="button" id="Add" class="btn btn-dark mb-2" style="display: block; margin:auto;" value="New Applicant"> 
+                    <p><small style="font-size:13px" class="text-center text-secondary d-block p-3">If you are a NEW STUDENT (you were never enrolled in any of our courses), please click the <strong>New Applicant</strong> button</small></p>
                     </form>
-                </div>
+                </section>
             </div>
-        </div>
-        <div class="container col-lg">
-            <section class="login card">
-            <form action="<?php echo $_SERVER['PHP_SELF']?>" method="post">
-                <h2 class="p-4 text-center" style="background-color:#0C293A;color:#fff">Login</h2>
-                <div class="mb-3 px-4">
-                    <label for="exampleInputEmail1" class="form-label">Email address</label>
-                    <input type="email" name="email" class="form-control" id="exampleInputEmail1" value="<?php echo $email?>" aria-describedby="emailHelp">
-                </div>
-                <div class="errormsg"><?php echo $errLoginMsg['email'] ?></div>
-                <div class="mb-1 px-4">
-                    <label for="exampleInputPassword1" class="form-label">Password</label>
-                    <input type="password" name="password" value="<?php echo $passsword?>"  class="form-control" id="exampleInputPassword1" value="">
-                </div>
-                <div class="errormsg"><?php echo $errLoginMsg['password'] ?><br><br>
-                <button type="submit" name="login" class="btn btn-dark mb-5">Submit</button>
-            </form>
-            </section>
         </div>
     </div>
     <!-- jQuery library -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     
     <script>
+        // login eye 
+        function toggleShowPassword(passwordField, eyeIcon) {
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                eyeIcon.classList.remove("fa-eye-slash");
+                eyeIcon.classList.add("fa-eye");
+            } else {
+                passwordField.type = "password";
+                eyeIcon.classList.remove("fa-eye");
+                eyeIcon.classList.add("fa-eye-slash");
+            }
+        }
+        // Add event listeners for both eye icons
+        const btn = 
+        document.getElementById("showPassword1").addEventListener("click", function() {
+            console.log('hi')
+            toggleShowPassword(document.getElementById("inputField"), this);
+        });
+
         document.getElementById('Add').onclick = ()=>{
             window.location = "form.php";
         }
 
+        // Jquery
         $(document).ready(function(){
             $('#search-btn').on("click", function(){
                 var search_term = $('#search').val();
@@ -191,7 +208,8 @@ if(isset($_POST['login'])){
             $('#course_load').hide();
             $('#modeAlert').hide();
             $('#courseAlert').hide();
-
+            
+            // alert to select course
             function modeAlert(){
                 var course_cat_id = $('#course_category').val();
                 var mode_id = $('#mode').val();

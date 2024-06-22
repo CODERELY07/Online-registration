@@ -20,8 +20,8 @@
             $output .= "<br>
             <table class='table table-bordered'>
                 <tr>
-                    <td class='bg-primary text-center' scope='col'>Batch</td>
-                    <td class='bg-primary text-center' scope='col'>".$row['batch']."</td>
+                    <td class='bg-primary text-white text-center' scope='col'>Batch</td>
+                    <td class='bg-primary text-center  text-white ' scope='col'>".$row['batch']."</td>
                    
                 </tr>
                 <tr>
