@@ -19,9 +19,8 @@ label{
     color: #040D12;
 }
 input,select{
-    height: 34px;
+    height: 34px !important;
     box-shadow: none !important;
-    
 }
 i{
     position: absolute !important;
@@ -136,6 +135,7 @@ i{
     padding: 20px;
     gap: 10px;
 }
+
 .adbox{
     display: flex;
     flex-basis: 49%;
@@ -163,7 +163,7 @@ i{
     justify-content: center;
 }
 #submit{
-    padding: 10px;
+    padding: 0 10px;
     font-size: 15px;
     font-family: Arial, Calibri, sans-serif;
     width: 15ch;

@@ -14,7 +14,12 @@ include ('credentialchecker.php');
 <head>
     <title>Document</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- font awsome library -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Script -->
+    <script defer src="ajax/request.js"></script>
+    <script defer src="js/script.js"></script>
+    <!-- Styles -->
     <link rel="stylesheet" href="style.css?v=<?php echo time(); ?>">
     <link rel="stylesheet" href="css/loading.css?v=<?php echo time(); ?>">
 </head>
@@ -127,15 +132,15 @@ include ('credentialchecker.php');
                     <h5 class="p-4 text-center" style="background-color:#0C293A;color:#fff">Login</h5>
                     <form action="<?php echo $_SERVER['PHP_SELF']?>" method="post" class="mt-2 p-4 px-2" id="loginForm">
                         <div class="mb-3 px-4">
-                            <label for="exampleInputEmail1" class="form-label">Email address</label>
-                            <input type="email" name="email" class="form-control" id="exampleInputEmail1" value="<?php echo $checkemail?>" aria-describedby="emailHelp">
+                            <label for="" class="form-label">Email address</label>
+                            <input type="email" name="email" class="form-control" id="" value="<?php echo $checkemail?>" aria-describedby="emailHelp">
                         </div>
                         <div class="errormsg"><?php echo $errormsg['chkemail'] ?></div>
                         <div class="mb-3 px-4">
                             <label for="passwordField" class="form-label">Password</label>
                             <div class="drop-parent">
-                                <input type="password" name="password"  class="form-control" id="inputField" value="<?php echo $checkpassword?>">
-                                <i class="fa-regular fa-eye-slash eye" id="showPassword1"></i>
+                                <input type="password" name="password"  class="inputField form-control" value="<?php echo $checkpassword?>">
+                                <i class="fa-regular fa-eye-slash eye showPassword1"></i>
                             </div>
                         </div>
                         <div class="errormsg"><?php echo $errormsg['chkpass'] ?></div><br><br>
@@ -153,182 +158,5 @@ include ('credentialchecker.php');
     </div>
     <!-- jQuery library -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    
-    <script>
-        // login eye 
-        function toggleShowPassword(passwordField, eyeIcon) {
-            if (passwordField.type === "password") {
-                passwordField.type = "text";
-                eyeIcon.classList.remove("fa-eye-slash");
-                eyeIcon.classList.add("fa-eye");
-            } else {
-                passwordField.type = "password";
-                eyeIcon.classList.remove("fa-eye");
-                eyeIcon.classList.add("fa-eye-slash");
-            }
-        }
-        // Add event listeners for both eye icons
-        const btn = 
-        document.getElementById("showPassword1").addEventListener("click", function() {
-            console.log('hi')
-            toggleShowPassword(document.getElementById("inputField"), this);
-        });
-
-        document.getElementById('Add').onclick = ()=>{
-            window.location = "form.php";
-        }
-
-        // Jquery
-        $(document).ready(function(){
-            $('#search-btn').on("click", function(){
-                var search_term = $('#search').val();
-                searching(search_term);
-            })
-
-            $('#search').on("keypress" , function (e){
-                if(e.which === 13){
-                    var search_term = $('#search').val();
-                    searching(search_term);
-                }
-            })
-            function searching(search_text){
-                // console.log(search_text)
-                $.ajax({
-                    url: "search.php",
-                    type: "POST",
-                    data: {search: search_text},
-                    success: function (data){
-                        $('#table-data').html(data);
-                    }
-                })
-            }
-
-            //course
-            // hides
-            $('#course_load').hide();
-            $('#modeAlert').hide();
-            $('#courseAlert').hide();
-            
-            // alert to select course
-            function modeAlert(){
-                var course_cat_id = $('#course_category').val();
-                var mode_id = $('#mode').val();
-                var course_id = $('#course').val();
-              
-                if(course_id != ""){
-                    $('#modeAlert').hide();
-                }
-                else{
-                    $('#modeAlert').show();
-                }
-
-                if(course_id != ""){
-                    $('#courseAlert').show();
-                }else{
-                    $('#courseAlert').hide();
-                }
-            }
-           
-
-            $('#course_category').change(function(){
-                modeAlert();
-                var category_id = $(this).val();
-                // console.log(category_id);
-                $('#course_load').show();
-                $('#course').hide();
-                $('#course_label').hide();
-                
-                setTimeout(function(){
-                    $.ajax({
-                        url: "get_courses.php",
-                        type:'POST',
-                        data:{category_id:category_id},
-                        success: function(response){
-                            $('#course_load').hide();
-                            $('#course').show();
-                            $('#course_label').show();
-                            $('#course').html(response);
-                        }
-                    })
-                },1000)
-            });
-
-            // requirements
-            $('#course').change(function(){
-                modeAlert()
-                var course_id = $(this).val();
-                // console.log(course_id);
-
-                $.ajax({
-                    url: "get_requirments.php",
-                    type: 'POST',
-                    data: {course_id: course_id},
-                    success:function(response){
-                        $('#requirements').html(response);
-                    }
-                })
-            })
-            
-            
-           //schedule
-           $('#course').change(function(){
-                modeAlert()
-                var course_id = $(this).val();
-                // console.log(mode);
-                // console.log(course_id);
-
-                    $.ajax({
-                    url: "get_schedule.php",
-                    type: 'POST',
-                    data: {course_id: course_id},
-                    success:function(response){
-                        $('#schedule').html(response);
-                    }
-                })
-            })
-
-            // mode
-            $('#course').change(function(){
-                modeAlert();
-                $('#mode').change(function(){
-                    modeAlert()
-                    var mode = $(this).val();
-                    var course_id = $('#course').val();
-                    // console.log(mode);
-                    // console.log(course_id);
-
-                        $.ajax({
-                        url: "get_schedule.php",
-                        type: 'POST',
-                        data: {course_id: course_id,mode:mode},
-                        success:function(response){
-                            $('#schedule').html(response);
-                        }
-                    })
-                })
-            })
-            $('#mode').change(function(){
-                modeAlert();
-                $('#course').change(function(){
-                    modeAlert();
-                    var course_id = $(this).val();
-                    var mode = $('#mode').val();
-                    // console.log(mode);
-                    // console.log(course_id);
-
-                        $.ajax({
-                        url: "get_schedule.php",
-                        type: 'POST',
-                        data: {course_id: course_id,mode:mode},
-                        success:function(response){
-                            $('#schedule').html(response);
-                        }
-                    })
-                })
-            
-            })
-        });
-       
-    </script>
 </body>
 </html>

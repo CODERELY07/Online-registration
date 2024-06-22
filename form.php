@@ -13,13 +13,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="style.css?v=<?php echo time(); ?>">
+    <script defer src="js/script.js"></script>
     <title>Document</title>
 </head>
 <body>
-    <div class="container card my-5 py-5 px-4">
+    <header>
+        <div class="row main-bg pt-5 pb-3">
+            <div class="col-lg py-2"><h1 class="text-center pt-2 big bolder">COMPAS</h1></div>
+            <div class="col-lg py-2 text-center">
+                <h2>WELCOME ABROAD</h2>
+                <p style="width:300px" class="mx-auto">MyCOMPASS Online Enrollment System and Student Portal</p>
+            </div>
+        </div>
+        <div class="other-info second-bg m-0" style="height:100px;width:101.2%" >
+
+        </div>
+    </header>
+    <div class="container my-5 card pb-4 p-0" style="width:95%;">
+        <div class="p-3 pt-4 pb-4" style="background-color:#0C293A;color:#fff">
+            <h3 class="text-center bolder">NAGA BRANCH</h3>
+            <h4 class="text-center">New Student Registration</h4>
+        </div>
         <form class="form-wrap" action="form.php" method="post">
-            <div class="wrapper">
+            <div class="wrapper p-4 pt-4">
                 <div class="">
                     <div>
                         <p class="text-secondary">To create account enter your valid email address and password here.</p>
@@ -30,13 +48,19 @@
                     </div>
                     <div>
                     <label for="password">Password</label>
-                    <input class="form-control" type="password" name="login_password"  value="<?php echo $password?>">
+                    <div class="drop-parent">
+                        <input class="form-control inputField" type="password" name="login_password"  value="<?php echo $password?>">
+                        <i class="fa-regular fa-eye-slash eye showPassword1"></i>
+                    </div>
                     <div class="errormsg"><?php echo $errormsg['password'] ?>
                     </div>
                     </div>
                     <div>
                     <label for="password">Confirm Password</label>
-                    <input class="form-control" type="password" name="confirm_password"  value="<?php echo $confirmpassword?>">
+                    <div class="drop-parent">
+                        <input class="form-control inputField" type="password" name="confirm_password"  value="<?php echo $confirmpassword?>">
+                        <i class="fa-regular fa-eye-slash eye showPassword1"></i>
+                    </div>
                     <div class="errormsg"><?php echo $errormsg['confirmpassword'] ?>
                     </div>
                     </div>
@@ -124,7 +148,7 @@
                 <div class="additional">
                     <div class="rank adbox">
                         <label for="rank form-label">Rank/Position</label>
-                        <select class="form-control " name="position" id="position">
+                        <select class="form-control" name="position" id="position">
                             <option <?php if(empty($rank)) echo "selected";?>></option>
                             <?php
                                 $sql_position = "SELECT * FROM positionList";
@@ -175,7 +199,7 @@
         
             </div>
             <div class="info-submit">
-                <input id="submit" type="submit" name="submit" class="btn btn-primary">
+                <input id="submit" type="submit" name="submit" class="btn btn-dark">
             </div>
             
             
