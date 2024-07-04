@@ -239,8 +239,21 @@
 
             #checking if there is a connection on the database
             if(mysqli_query($connect,$sql)){
-                header("Location: index.php");
-                exit();
+                $secretKey = "6LcP9AcqAAAAAL7SgSrPIwrm2CwL1mwUK1WXlCkL";
+                $response = $_POST['g-recaptcha-response'];
+                $userIP = $_SERVER['REMOTE_ADDR']; 
+            
+                $url = "https://www.google.com/recaptcha/api/siteverify?secret=$secretKey&response=$response&remoteip=$userIP";
+                $response = file_get_contents($url);
+    
+                $response = json_decode($response);
+                if ($response->success) {
+                    echo "<script>alert('Verification success');</script>";
+                    echo "<script>window.location.href = 'index.php';</script>";
+                    exit();
+                } else {
+                    echo "<script>alert('Verification Failed');</script>";
+                }                
             }
             else{
                 echo "query_error:" . mysqli_error($connect);

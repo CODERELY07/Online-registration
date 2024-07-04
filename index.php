@@ -151,6 +151,7 @@ include ('credentialchecker.php');
                         <p class="form-label text-secondary" style="text-align: center; color:black;font-size:14px ">----OR----</p>
                         <input type="button" id="Add" class="btn btn-dark mb-2" style="display: block; margin:auto;" value="New Applicant"> 
                     <p><small style="font-size:13px" class="text-center text-secondary d-block p-3">If you are a NEW STUDENT (you were never enrolled in any of our courses), please click the <strong>New Applicant</strong> button</small></p>
+                    <p><small style="font-size:13px" class="text-center text-secondary d-block">If you are an OLD STUDENT (you already have records with us) and forgot your account <strong><a href="#">click here.</a></strong></small></p>
                     </form>
                 </section>
             </div>
