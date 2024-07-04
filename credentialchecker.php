@@ -1,6 +1,6 @@
 <?php
     include('config/dbcheck.php');
-    $errormsg = array('srn' => '', 'mode'=>'', 'firstname'=>'', 'middlename'=>'', 'lastname'=>'', 'address'=>'', 'gender'=>'',  'birth'=>'', 'email' => '', 'contact'=>'', 'place'=>'', 'password' => '','confirmpassword' => '','chkemail' => '' , 'chkpass' => '');
+    $errormsg = array('srn' => '', 'mode'=>'', 'firstname'=>'', 'middlename'=>'', 'lastname'=>'', 'address'=>'', 'gender'=>'',  'birth'=>'', 'email' => '', 'contact'=>'', 'place'=>'', 'password' => '','confirmpassword' => '','chkemail' => '' , 'chkpass' => '','signature' => '');
     $srn = $mode = $firstname = $midname = $lastname = $suffix = $address = $gender = $rank = $birth = $contact = $status = $email = $place = $password = $confirmpassword = $checkemail = $checkpassword = '';
 
     #login checker
@@ -210,6 +210,12 @@
             $contact = $_POST['contact'];
         }
 
+        // signature
+        if(empty($_POST['signature'])){
+            $errormsg['signature'] = "Your Signature is required";
+        }
+
+
         if(array_filter($errormsg)){
             echo "Unable to proceed, error/s detected!";
         }
@@ -236,6 +242,33 @@
 
             #Putting data on the database
             $sql = "INSERT INTO trainees(srn_number,mode,firstname,middlename,lastname,suffix,addrss,gender,position,birth,stat,email,hashed_password,place,contact) VALUES('$srn','$mode','$firstname','$midname','$lastname','$suffix','$address','$gender','$rank','$birth','$status','$email','$enc_password','$place','$contact') ";
+            
+            // signature
+            if (!empty($_POST['signature'])) {
+                $folderPath = "upload/";
+            
+                $base64_string = $_POST['signature'];
+                $base64_string = str_replace('data:image/png;base64,', '', $base64_string);
+            
+            
+                $image_data = base64_decode($base64_string);
+            
+            
+                $file = $folderPath . $firstname . ' ' .$lastname . '.png';
+            
+            
+                while (file_exists($file)) {
+                    $file = $folderPath . $firstname . ' ' .$lastname . '.png';
+                }
+            
+                if (file_put_contents($file, $image_data)) {
+                    echo "Signature Uploaded Successfully.";
+                } else {
+                    echo "Failed to upload signature.";
+                }
+            } else {
+                echo "No signature data received.";
+            }
 
             #checking if there is a connection on the database
             if(mysqli_query($connect,$sql)){

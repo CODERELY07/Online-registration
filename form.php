@@ -15,10 +15,27 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="style.css?v=<?php echo time(); ?>">
+    <!-- Signature CSS -->
+    <link rel="stylesheet" href="http://keith-wood.name/css/jquery.signature.css">
     <!-- Recaptcha -->
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script defer src="js/script.js"></script>
-    <title>Document</title>
+    <title>Registration</title>
+    <style>
+        .kbw-signature {
+            width: 100%;
+            height: 200px;
+        }
+        #sigpad canvas{
+            width: 100% !important;
+            height:auto;
+        }
+        .sign{
+            width: 95%;
+            max-width:400px;
+            margin:0 auto 30px;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -198,15 +215,59 @@
                         <div class="errormsg"><?php echo $errormsg['place'] ?></div>
                     </div>
                 </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6 offset-md-3 mt-5">
+                            <div class="card sign">
+                                <div class="card-header bg-dark text-white">
+                                    <h5>Your Signature is required</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="col-md-12">
+                                        <label for="">Signature Here</label>
+                                        <div class="errormsg"><?php echo $errormsg['signature'] ?></div>
+                                        <br>
+                                        <!-- <form method="POST" action="upload.php"> -->
+                                            <div id="sigpad"></div>
+                                            <br><br>
+                                            <button id="clear" class="btn btn-danger">
+                                                Clear
+                                            </button>
+                                            <textarea name="signature" id="signature" style="display:none"></textarea>
+                                            <!-- <button type="submit" class="btn btn-success float-end">Save</button> -->
+                                        <!-- </form> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="g-recaptcha mx-4" data-sitekey="6LcP9AcqAAAAAFNnxuRQgSVRQSeDM4a7I16StaVK"></div>
             </div>
             <div class="info-submit">
                 <input id="submit" type="submit" name="submit" class="btn btn-dark">
             </div>
-            
-            
-        
         </form>
     </div>
+   
+    <!-- Jquery and Jquery UI -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.14.0-beta.2/jquery-ui.min.js" integrity="sha256-E7PeZTkHU61hmvmEMwtUMgm9Aff574wswy5F1Y0oIRA=" crossorigin="anonymous"></script>
+
+    <!-- Signature JavaScript -->
+    <script type="text/javascript" src="http://keith-wood.name/js/jquery.signature.js"></script>
+
+    <script>
+        var sigpad = $('#sigpad').signature({
+            syncField: '#signature',
+            syncFormat: 'PNG'
+        });
+
+        $('#clear').click(function (e){
+            e.preventDefault();
+            sigpad.signature('clear');
+            $('#signature').val('');
+        });
+    </script>
 </body>
 </html>
